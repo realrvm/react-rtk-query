@@ -1,0 +1,8 @@
+.counter {
+  margin-block-start: 10px;
+
+  &__btns {
+    display: flex;
+    gap: 20px;
+  }
+}
