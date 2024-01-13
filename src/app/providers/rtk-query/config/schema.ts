@@ -12,11 +12,13 @@ export type StateSchema = {
   [productsApi.reducerPath]: ReturnType<typeof productsApi.reducer>;
 };
 
-type ThunkExtraArg = {
+type ExtraArg = {
   api: AxiosInstance;
 };
 
 export type ThunkConfig<T> = {
   rejectedValue: T;
-  extra: ThunkExtraArg;
+  extra: ExtraArg;
 };
+
+export type ListenerConfig = ExtraArg;

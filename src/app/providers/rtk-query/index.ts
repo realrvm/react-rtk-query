@@ -2,7 +2,7 @@ export { AppProvider } from "./ui/AppProvider";
 
 export { useActionCreators, useAppDispatch, useStateSelector } from "./hooks";
 
-export type { StateSchema, ThunkConfig } from "./config/schema";
+export type { StateSchema, ThunkConfig, ListenerConfig } from "./config/schema";
 
 export {
   startAppListening,

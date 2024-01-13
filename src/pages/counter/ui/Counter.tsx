@@ -1,7 +1,12 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 
 import { counterActions, getCountValue } from "..";
-import { useActionCreators, useStateSelector } from "@/app/providers/rtk-query";
+import {
+  addAppListener,
+  useActionCreators,
+  useAppDispatch,
+  useStateSelector,
+} from "@/app/providers/rtk-query";
 
 import styles from "./styles.module.scss";
 
@@ -10,6 +15,7 @@ type CounterProps = Record<string, never>;
 export const Counter: FC<CounterProps> = () => {
   const count = useStateSelector(getCountValue);
   const countAction = useActionCreators(counterActions);
+  const dispatch = useAppDispatch();
 
   const handleIncrement = () => {
     countAction.increment();
@@ -26,6 +32,20 @@ export const Counter: FC<CounterProps> = () => {
   const setValue = () => {
     countAction.setValue(10);
   };
+
+  // так делать не рекомендуется. Просто для примера
+  useEffect(() => {
+    const unsubscribe = dispatch(
+      addAppListener({
+        actionCreator: counterActions.increment,
+        effect: async (action, listenerApi) => {
+          await listenerApi.delay(2000);
+          console.log(action, listenerApi);
+        },
+      }),
+    );
+    return unsubscribe;
+  }, []);
 
   return (
     <section>
