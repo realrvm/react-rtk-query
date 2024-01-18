@@ -17,7 +17,11 @@ export const RandomFood: FC<RandomFoodProps> = () => {
   const dispatch = useActionCreators(randomFoodActions);
 
   useEffect(() => {
-    dispatch.fetchRandomFood();
+    async function fn() {
+      const res = await dispatch.fetchRandomFood().unwrap();
+      console.log(res);
+    }
+    fn();
   }, []);
 
   return (

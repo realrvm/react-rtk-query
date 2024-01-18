@@ -10,6 +10,7 @@ import { AppDispatch, RootState } from "../types";
 import { $api_dummy } from "@/shared/lib/api";
 import { QuotesSchema, quotesActions } from "@/pages/quotes";
 import { ListenerConfig } from "..";
+import { AxiosError } from "axios";
 
 const extraArgument = {
   api: $api_dummy,
@@ -36,9 +37,21 @@ startAppListening({
     const { quoteId } = action.payload;
     // delay
     await delay(1000);
-    const response = await (extra as ListenerConfig).api.get<
-      Omit<QuotesSchema, "quoteId">
-    >(`/quotes/${quoteId}`);
-    dispatch(quotesActions.addQoutes(response.data));
+    try {
+      const response = await (extra as ListenerConfig).api.get<
+        Omit<QuotesSchema, "quoteId">
+      >(`/quotes/${quoteId}`);
+
+      dispatch(quotesActions.addQoutes(response.data));
+    } catch (err) {
+      const error: AxiosError<any> = err as Error & AxiosError<any>;
+
+      if (!error.response) {
+        throw (err as Error).message;
+      }
+
+      // TODO
+      return error.response.data;
+    }
   },
 });

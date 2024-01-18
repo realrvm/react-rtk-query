@@ -8,7 +8,8 @@ import { ThunkConfig } from "@/app/providers/rtk-query";
 import { AxiosError } from "axios";
 
 type ValidationErrors = {
-  errorMessage: string;
+  error: string;
+  status: number;
 };
 
 const initialState: RandomFoodSchema = {
@@ -41,7 +42,7 @@ const randomFoodSlice = createSlice({
           const error: AxiosError<ValidationErrors> = err as Error &
             AxiosError<ValidationErrors>;
           if (!error.response) {
-            throw err;
+            throw (err as Error).message;
           }
 
           return rejectWithValue(error.response.data);
